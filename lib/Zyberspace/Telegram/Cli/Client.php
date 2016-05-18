@@ -410,4 +410,63 @@ class Client extends RawClient
 
         return $this->exec('send_file ' . $peer . ' ' . $formattedPath);
     }
+    
+        /**
+     * Returns the informations about the user as an object.
+     *
+     * @param string $phoneNumber The phone-number of the new contact, needs to be a telegram-user.
+     *                            Every char that is not a number gets deleted, so you don't need to care about spaces,
+     *                            '+' and so on.
+     *
+     * @return object|boolean An object with informations about the user; false if somethings goes wrong
+     */
+    public function getUserInfoByPhoneNumber($phoneNumber)
+    {
+        $phoneNumber = preg_replace('%[^0-9]%', '', (string) $phoneNumber);
+        if (empty($phoneNumber)) {
+            return false;
+        }
+
+        $contactList = $this->getContactList();
+        foreach ($contactList as $contact) {
+            if ($contact->phone == $phoneNumber) {
+                return $contact;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Add a contact if not present, and sends a text message to $peer.
+     *
+     * @param string $phoneNumber The phone-number of the new contact, needs to be a telegram-user.
+     *                            Every char that is not a number gets deleted, so you don't need to care about spaces,
+     *                            '+' and so on.
+     * @param string $firstName The first name of the new contact
+     * @param string $lastName The last name of the new contact
+     * @param string $msg The message to send, gets escaped with escapeStringArgument()
+     *
+     * @return boolean true on success, false otherwise
+     */
+    public function addAndMsg($phoneNumber, $firstName, $lastName, $msg)
+    {
+        // Get contact Info
+        $contact = $this->getUserInfoByPhoneNumber($phoneNumber);
+
+        // Add new contact if not present
+        if (!$contact) {
+            $this->addContact($phoneNumber, $firstName, $lastName);
+            // Get user info to refresh contact list. Otherwise, $this->msg() won't send
+            $contact = $this->getUserInfoByPhoneNumber($phoneNumber);
+        }
+
+        // Return if contact is not already saved
+        if (!$contact || !is_object($contact)) {
+            return false;
+        }
+
+        // Send message
+        return $this->msg($contact->print_name, $msg);
+    }
+
 }
