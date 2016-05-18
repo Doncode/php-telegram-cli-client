@@ -437,7 +437,7 @@ class Client extends RawClient
     }
 
     /**
-     * Add a contact if not present, and sends a text message to $peer.
+     * Add a contact if not present, and sends a text message.
      *
      * @param string $phoneNumber The phone-number of the new contact, needs to be a telegram-user.
      *                            Every char that is not a number gets deleted, so you don't need to care about spaces,
