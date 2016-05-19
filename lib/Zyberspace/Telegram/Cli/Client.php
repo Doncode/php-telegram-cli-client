@@ -428,9 +428,11 @@ class Client extends RawClient
         }
 
         $contactList = $this->getContactList();
-        foreach ($contactList as $contact) {
-            if ($contact->phone == $phoneNumber) {
-                return $contact;
+        if (is_array($contactList)) {
+            foreach ($contactList as $contact) {
+                if ($contact->phone == $phoneNumber) {
+                    return $contact;
+                }
             }
         }
         return false;
