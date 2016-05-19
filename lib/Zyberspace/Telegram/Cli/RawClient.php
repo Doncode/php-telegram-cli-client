@@ -40,15 +40,19 @@ class RawClient
      *
      * @param string $remoteSocket Address of the socket to connect to. See stream_socket_client() for more info.
      *                             Can be 'unix://' or 'tcp://'.
+     * @param integer $timeout Timout in seconds
      *
-     * @throws ClientException Throws an exception if no connection can be established.
+     * @throws ClientException
      */
-    public function __construct($remoteSocket)
+    public function __construct($remoteSocket, $timeout = 5)
     {
-        $this->_fp = stream_socket_client($remoteSocket);
+        // Set timeout on connection
+        $this->_fp = stream_socket_client($remoteSocket, $errno, $errstr, $timeout);
         if ($this->_fp === false) {
             throw new ClientException('Could not connect to socket "' . $remoteSocket . '"');
         }
+        // Set timeout period on a stream
+        stream_set_timeout($this->_fp, $timeout);
     }
 
     /**
