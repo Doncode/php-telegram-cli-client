@@ -27,12 +27,12 @@ NAME=telegram-cli
 #USERNAME=telegramd
 #GROUPNAME=telegramd
 LOGFILE=/var/log/telegramd.log
-DAEMON=/home/alberto/src/tg/bin/telegram-cli
+DAEMON=/usr/local/bin/tg/bin/telegram-cli
 TGPORT=7313
 RUNDIR=/var/run/$NAME
 SOCKET=$RUNDIR/$NAME.socket
 
-TelegramKeyFile="/etc/telegram-cli/server.pub"
+TelegramKeyFile="/usr/local/bin/tg/server.pub"
 #ReceiveLua=/usr/local/lib/tg-handler.lua
 
 DAEMON_ARGS="--json -W -k $TelegramKeyFile -L $LOGFILE -P $TGPORT -d -vvvRC"
