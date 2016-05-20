@@ -414,7 +414,7 @@ class Client extends RawClient
         /**
      * Returns the informations about the user as an object.
      *
-     * @param string $phoneNumber The phone-number of the new contact, needs to be a telegram-user.
+     * @param string $phoneNumber The phone-number of the contact, needs to be a telegram-user.
      *                            Every char that is not a number gets deleted, so you don't need to care about spaces,
      *                            '+' and so on.
      *
